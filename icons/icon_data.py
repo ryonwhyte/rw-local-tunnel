@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+"""
+Embedded icon data for the application
+This gets compiled into the executable
+"""
+
+import base64
+import io
+from PIL import Image
+
+# Icon as base64 encoded PNG (this is a simple network/tunnel icon)
+ICON_BASE64 = """
+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
+YgAAAABJRU5ErkJggg==
+"""
+
+def get_icon_image():
+    """Get PIL Image object from embedded icon data"""
+    icon_data = base64.b64decode(ICON_BASE64)
+    return Image.open(io.BytesIO(icon_data))
+
+def save_icon_to_temp():
+    """Save icon to temporary location and return path"""
+    import tempfile
+    import os
+
+    temp_dir = tempfile.gettempdir()
+    icon_path = os.path.join(temp_dir, "rw-local-tunnel.png")
+
+    img = get_icon_image()
+    img.save(icon_path)
+
+    return icon_path

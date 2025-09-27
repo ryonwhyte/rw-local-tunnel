@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=RW Local Tunnel
+Comment=Tailscale tunnel manager for NPM setups
+Exec=pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY /home/ryon-whyte/Documents/GitHub/rw-local-tunnel/dist/RWLocalTunnel
+Icon=/home/ryon-whyte/Documents/GitHub/rw-local-tunnel/rw-local-tunnel.png
+Terminal=false
+Categories=Network;System;
+Keywords=tailscale;tunnel;npm;networking;
+StartupNotify=true

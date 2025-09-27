@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=RW Local Tunnel
+Comment=Tailscale tunnel manager for NPM setups
+Exec=gnome-terminal -- bash -c "sudo /home/ryon-whyte/Documents/GitHub/rw-local-tunnel/dist/RWLocalTunnel; read -p 'Press Enter to close'"
+Icon=/home/ryon-whyte/Documents/GitHub/rw-local-tunnel/rw-local-tunnel.png
+Terminal=true
+Categories=Network;System;
+Keywords=tailscale;tunnel;npm;networking;
+StartupNotify=true

@@ -1,0 +1,13 @@
+# Core dependencies
+rich>=13.0.0      # Beautiful terminal interfaces
+psutil>=5.9.0     # Cross-platform system/process utilities
+
+# GUI dependencies
+customtkinter>=5.0.0  # Modern-looking tkinter widgets
+pillow>=9.0.0         # Image processing for GUI
+pystray>=0.19.0       # System tray integration
+
+# Development dependencies (optional)
+pytest>=7.0.0     # Testing framework
+black>=22.0.0     # Code formatting
+pyinstaller>=5.0  # Create standalone executables
