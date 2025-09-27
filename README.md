@@ -48,6 +48,7 @@ This tool is designed for a **very specific setup**:
 
 ### Installation
 
+#### Method 1: System Installation (Recommended)
 ```bash
 # Clone the repository
 git clone https://github.com/yourusername/rw-local-tunnel.git
@@ -56,20 +57,32 @@ cd rw-local-tunnel
 # Install dependencies
 pip install -r requirements.txt
 
-# Make scripts executable
-chmod +x *.sh
+# Build desktop application
+./build_tools/build_desktop_app.sh
+
+# Install system-wide with desktop integration
+./install.sh
+```
+
+#### Method 2: Development Setup
+```bash
+# Clone and install for development
+git clone https://github.com/yourusername/rw-local-tunnel.git
+cd rw-local-tunnel
+pip install -r requirements.txt
 ```
 
 ### Usage Options
 
-#### 🖥️ **Desktop GUI (Recommended)**
+#### 🖥️ **Desktop Application (Recommended)**
 Modern desktop application with multiple tunnel management:
 
 ```bash
-# Launch GUI application
-./launch_gui.sh
+# After system installation - launch from applications menu
+# Or from terminal:
+rw-tunnel-launcher.sh
 
-# Or directly
+# Development mode:
 sudo python rw_tunnel_gui.py
 ```
 
@@ -79,6 +92,7 @@ sudo python rw_tunnel_gui.py
 - 🔄 Multiple tunnel management
 - 🎛️ Visual status indicators
 - 🛑 One-click tunnel stopping
+- 🎨 Beautiful CustomTkinter interface
 
 #### 📟 **Command Line Interface**
 Traditional terminal interface:
@@ -97,14 +111,6 @@ sudo python rw-local-tunnel.py start 3000 --no-monitor
 sudo python rw-local-tunnel.py stop 8080
 ```
 
-#### 🔧 **System Tray**
-Background system tray integration:
-
-```bash
-# Run in system tray
-sudo python rw_tunnel_tray.py
-```
-
 ## 🎯 Use Cases
 
 ### 1. **NPM Integration - Web Services**
@@ -114,7 +120,7 @@ Expose local web applications through NPM reverse proxy:
 docker run -p 3000:3000 my-web-app
 
 # Create tunnel for NPM to access
-sudo ./launch_gui.sh
+rw-tunnel-launcher.sh  # Launch GUI
 # In GUI: Create tunnel for port 3000
 
 # Configure in NPM:
@@ -127,7 +133,7 @@ sudo ./launch_gui.sh
 Expose API endpoints with SSL termination:
 ```bash
 # API service on port 8080
-./launch_gui.sh
+rw-tunnel-launcher.sh  # Launch GUI
 # Create tunnel for port 8080
 
 # NPM config:
@@ -155,7 +161,7 @@ Secure database management tools:
 docker run -p 8081:80 phpmyadmin
 
 # Tunnel the interface
-sudo ./launch_gui.sh  # Create tunnel for port 8081
+rw-tunnel-launcher.sh  # Launch GUI, create tunnel for port 8081
 
 # Access via NPM: https://db.yourdomain.com
 ```
@@ -292,7 +298,19 @@ tailscale status
 
 ## 🏗️ Building Desktop Application
 
-Create standalone executables for both CLI and GUI versions:
+Create standalone executable with desktop integration:
+
+### Project Structure
+```
+rw-local-tunnel/
+├── rw-local-tunnel.py      # CLI version
+├── rw_tunnel_gui.py        # GUI version
+├── build_tools/            # Build scripts and tools
+├── desktop_files/          # Desktop integration files
+├── icons/                  # Icon files and data
+├── dist/                   # Built executable
+└── install.sh              # System installer
+```
 
 ### Quick Build
 
@@ -301,48 +319,58 @@ Create standalone executables for both CLI and GUI versions:
 source venv/bin/activate
 pip install -r requirements.txt
 
-# 2. Test build requirements
-./test_build.sh
+# 2. Build desktop application
+./build_tools/build_desktop_app.sh
 
-# 3. Build applications
-./scripts/build.sh
-
-# 4. Install as desktop app (optional)
-./scripts/install-desktop.sh
+# 3. Install system-wide with desktop integration
+./install.sh
 ```
 
 ### What Gets Built
 
-- **`dist/rw-local-tunnel-cli`** - Command line version (standalone)
-- **`dist/rw-local-tunnel-gui`** - Desktop GUI version (standalone)
+- **`dist/RWLocalTunnel`** - Standalone GUI executable (22MB)
+- **Desktop integration** - Application menu entry with icon
+- **PolicyKit support** - Proper authentication for GUI root access
+- **Launcher scripts** - Multiple desktop launcher options
 
-### Desktop Integration
+### Desktop Integration Features
 
-The desktop installer creates:
-- Application menu entry: "RW Local Tunnel"
-- Desktop icon and integration
-- System-wide installation in `/usr/local/bin/`
-- Uninstall script: `./scripts/uninstall-desktop.sh`
+The installer creates:
+- **Application menu entry**: "RW Local Tunnel"
+- **Desktop icon**: Embedded icon works on any system
+- **PolicyKit policy**: Proper GUI authentication
+- **System launcher**: `rw-tunnel-launcher.sh` command
+- **Multiple launch options**: Simple, Fixed, and PolicyKit versions
 
-### Manual Installation
+### Installation Options
 
+#### System Installation (Recommended)
 ```bash
-# Copy executables to system path
-sudo cp dist/rw-local-tunnel-cli /usr/local/bin/rw-tunnel
-sudo cp dist/rw-local-tunnel-gui /usr/local/bin/rw-tunnel-gui
+# Install to /usr/local/bin with full desktop integration
+./install.sh
 
-# Launch GUI from anywhere
-rw-tunnel-gui
-
-# Use CLI from anywhere
-rw-tunnel start 8080
+# Launch from applications menu or:
+rw-tunnel-launcher.sh
 ```
+
+#### Portable Usage
+```bash
+# Run directly from dist/ folder
+sudo ./dist/RWLocalTunnel
+```
+
+### Desktop Launcher Variants
+
+1. **RWLocalTunnel-Simple.desktop** - Uses gnome-terminal (most reliable)
+2. **RWLocalTunnel-Fixed.desktop** - Advanced launcher with environment preservation
+3. **PolicyKit integration** - System-level authentication
 
 ### Build Requirements
 
 - Python 3.8+
 - Virtual environment (recommended)
-- PyInstaller
+- PyInstaller 6.16+
+- CustomTkinter, PIL, psutil
 - All dependencies from `requirements.txt`
 
 ## 🧪 Development
@@ -374,11 +402,14 @@ black --check rw-local-tunnel.py
 1. **Setup Tailscale/Headscale** on your server
 2. **Install NPM** (usually via Docker)
 3. **Configure NPM** with your domains and SSL certificates
-4. **Use rw-local-tunnel** to expose services to NPM:
+4. **Install and use rw-local-tunnel** to expose services to NPM:
 
 ```bash
-# Example: Expose a web application
-./launch_gui.sh
+# Install system-wide
+./install.sh
+
+# Launch GUI application
+rw-tunnel-launcher.sh
 # Create tunnel for port 3000
 
 # In NPM Web UI:
